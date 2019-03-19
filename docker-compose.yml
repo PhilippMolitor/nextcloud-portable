@@ -1,0 +1,54 @@
+version: '2'
+
+services:
+  proxy:
+    image: abiosoft/caddy:no-stats
+    restart: always
+    ports:
+    - 80:80
+    - 443:443
+    environment:
+    - CADDYPATH=/certs
+    - ACME_AGREE=true
+    # CHANGE THESE OR THE CONTAINER WILL FAIL TO RUN
+    - CADDY_LETSENCRYPT_EMAIL=certificates@example.com
+    - CADDY_EXTERNAL_DOMAIN=mydomain.com
+    - CADDY_PROXY_URL=http://app:80
+    volumes:
+    - ./data/letsencrypt:/certs:rw
+    - ./config/Caddyfile:/etc/Caddyfile:ro
+
+  app:
+    image: nextcloud:latest
+    restart: always
+    ports:
+    - 8080:80
+    environment:
+    - REDIS_HOST=cache
+    # database connection
+    - MYSQL_HOST=database
+    - MYSQL_DATABASE=nextcloud
+    - MYSQL_USER=nextcloud
+    - MYSQL_PASSWORD=nextcloud
+    volumes:
+    - ./data/nextcloud_config:/var/www/html/config:rw
+    - ./data/nextcloud_apps:/var/www/html/custom_apps:rw
+    - ./data/nextcloud_data:/var/www/html/data:rw
+
+  database:
+    image: mariadb:latest
+    restart: always
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    volumes:
+    - ./data/database:/var/lib/mysql
+    environment:
+    - MYSQL_ROOT_PASSWORD=nextcloud
+    - MYSQL_DATABASE=nextcloud
+    - MYSQL_USER=nextcloud
+    - MYSQL_PASSWORD=nextcloud
+  
+  cache:
+    image: redis:alpine
+    restart: always
+    volumes:
+    - ./data/cache:/data:rw

@@ -1,0 +1,26 @@
+http://{$CADDY_EXTERNAL_DOMAIN} {
+  gzip
+  redir https://{host}{uri}
+}
+
+https://{$CADDY_EXTERNAL_DOMAIN} {
+  gzip
+
+  tls {$CADDY_LETSENCRYPT_EMAIL}
+
+  # Service discovery via well-known
+  redir /.well-known/carddav /remote.php/carddav 301
+  redir /.well-known/caldav /remote.php/caldav 301
+
+  proxy / {$CADDY_PROXY_URL} {
+    # X-Forwarded-For, etc...
+    transparent
+
+    # Nextcloud best practices and security
+    header_downstream Strict-Transport-Security "max-age=15552000;"
+    header_downstream Referrer-Policy "strict-origin-when-cross-origin"
+    header_downstream X-XSS-Protection "1; mode=block"
+    header_downstream X-Content-Type-Options "nosniff"
+    header_downstream X-Frame-Options "SAMEORIGIN"
+  }
+}
