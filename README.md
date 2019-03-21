@@ -28,7 +28,7 @@ image registry / Docker Hub.
 ## Container topology
 The service is assembled from several applications, not just Nextcloud:
 
-1. A reverse proxy to handle incoming connections and TLS certficated
+1. A reverse proxy to handle incoming connections and TLS certficates
    via LetsEncrypt ([Caddy webserver](https://hub.docker.com/r/abiosoft/caddy/) 
    with a custom configuration)
 2. The [Nextcloud](https://hub.docker.com/_/nextcloud/) application (which 
@@ -108,7 +108,7 @@ which flushes the database to disk from time to time.
    ```sh
    docker-compose up -d
    ```
-    or when using <kbd>make</kbd>:
+    or using the included `Makefile`:
     ```sh
     make
     ```
@@ -118,8 +118,8 @@ which flushes the database to disk from time to time.
 
 Updating Nextcloud is as easy as typing two commands into your terminal:
 ```sh
-docker-compose pull # pulls the latest images of all defined services
-docker-compose up -d # re-creates containers that have a new image tag pulled
+docker-compose pull # pull the latest images of all defined services
+docker-compose up -d # re-create containers that have a new image tag available
 ```
 
 The officical Nextcloud container image is shipped without the web-updater, 
@@ -144,11 +144,16 @@ The following targets are included:
 - **backup**: creates a backup of all data including the `git` history, and
   saves it to `./backups/<timestamp>.tar.gz`, excluding the `./backups`
   directory. The backup file is able to run the services anywhere in case of
-  desaster recovery, as every needed component is included. 
+  disaster recovery, as every needed component is included.
+- **maintenance**: This runs certain database cleanup / improvement routines:
+  - db:convert-filecache-bigint
+  - db:convert-mysql-charset
+  - db:add-missing-indices
 - **clean**: WARNING: this make target first stops all services, and then
-  **removes any persistent data and backups!**. This means all your data inside
-  Nextcloud, and also all backups are gone afterwards. This target is only
-  meant for quickly resetting a dummy instance to test out new features.
+  **removes any persistent data and also all backups!**. This means all your
+  data inside Nextcloud, and also all backups are gone afterwards. This target
+  is only meant for quickly resetting a dummy instance to test out new
+  features.
 ## Credits
 Authors:
 * Philipp Molitor <[https://phils-lab.io](https://phils-lab.io)>
