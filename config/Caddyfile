@@ -1,11 +1,9 @@
-http://{$CADDY_EXTERNAL_DOMAIN} {
-  gzip
-  redir https://{host}{uri}
-}
-
-https://{$CADDY_EXTERNAL_DOMAIN} {
+# Using the bare FQDN will automatically redirect http -> https
+{$CADDY_EXTERNAL_DOMAIN} {
+  # Enable basic compression
   gzip
 
+  # Automatic TLS
   tls {$CADDY_LETSENCRYPT_EMAIL}
 
   # Service discovery via well-known
