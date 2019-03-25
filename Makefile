@@ -8,7 +8,6 @@ maintenance:
 	docker-compose exec -u 33 app php -f /var/www/html/occ db:add-missing-indices -n -v
 	@echo "> done!"
 
-
 .PHONY: run-daemon
 run-daemon:
 	@echo "> running as daemon..."
