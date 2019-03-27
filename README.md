@@ -64,7 +64,7 @@ modern defaults (such as only enabling TLS1.2).
 
 The supplied caddy configuration file implements the Nextcloud best practices,
 such as adequate HSTS headers. You can find the configuration file at
-`./config/proxy/Caddyfile`.
+`./config/Caddyfile`.
 
 In this workshop, we use the image tagged "no-stats", which forbids caddy
 to send telemetry data back to its vendor.
