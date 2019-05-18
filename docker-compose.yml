@@ -40,7 +40,11 @@ services:
   database:
     image: mariadb:latest
     restart: always
-    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    command:
+    - --transaction-isolation=READ-COMMITTED
+    - --binlog-format=ROW
+    - --character-set-server=utf8mb4
+    - --collation-server=utf8mb4_unicode_ci
     volumes:
     - ./data/database:/var/lib/mysql
     environment:
