@@ -21,10 +21,10 @@ services:
   app:
     image: nextcloud:latest
     restart: always
-    ## Enable this setting to access the nextcloud instance locally,
-    ## without the reverse proxy. (debug only!!!)
-    # ports:
-    # - 8080:80
+    ## Enable this to access the nextcloud instance locally,
+    ## without the reverse proxy. (debugging only!!!)
+    ports:
+    - 8080:80
     environment:
     - REDIS_HOST=cache
     # database connection
